@@ -1,0 +1,65 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#07111f"><link rel="manifest" href="manifest.json"><title>SR Trader — Live</title><style>
+*{box-sizing:border-box}body{margin:0;background:#07111f;color:#eaf2ff;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}header{position:sticky;top:0;z-index:5;background:#091525dd;backdrop-filter:blur(10px);display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid #1c3048}.brand{font-weight:900;letter-spacing:1.5px;font-size:20px}.sub{font-size:11px;color:#8297b1}.pill{font-size:11px;border:1px solid #2d4865;border-radius:20px;padding:6px 10px;color:#8fe0bd}main{max-width:720px;margin:auto;padding:12px 12px 70px}.card{background:#0c1a2b;border:1px solid #1b3048;border-radius:14px;padding:14px;margin:10px 0;box-shadow:0 6px 20px #0003}h2{font-size:14px;margin:0 0 12px;color:#b9c9dc}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}label{font-size:11px;color:#8fa5bf}select,input{display:block;width:100%;margin-top:6px;background:#07111f;color:#eef6ff;border:1px solid #29415c;border-radius:9px;padding:11px;font-size:13px}input[type=checkbox]{display:inline-block;width:auto;margin:0 6px 0 0;accent-color:#60a9ff}.checks{display:grid;grid-template-columns:1fr 1fr;gap:11px}.checks label{color:#b9c9dc}.signal{border-color:#294968}.signalTop{display:flex;justify-content:space-between;align-items:center;color:#8ea5bd;font-size:12px}.signalTop strong{font-size:27px;letter-spacing:1px}.score{display:flex;align-items:center;gap:10px;margin:12px 0}.bar{height:7px;flex:1;background:#15283d;border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:#70b6ff;transition:.3s}.score span{font-size:12px;color:#a9bad0}.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.metrics div{background:#07111f;border-radius:9px;padding:8px}.metrics small{display:block;color:#7289a4;font-size:9px}.metrics b{font-size:12px}.signal p,.note{font-size:11px;color:#91a5bd;line-height:1.5}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:10px 0}button{width:100%;border:0;border-radius:10px;padding:13px;background:#2c83ff;color:white;font-weight:800;letter-spacing:.4px}button.secondary{background:#17304b;border:1px solid #31516e}button.danger{background:#351b25;border:1px solid #673445;margin-top:10px}.next{display:flex;justify-content:space-between;align-items:center}.next b{font-size:24px}.next span{font-size:12px;color:#9bb0c8}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.stats span{background:#07111f;padding:9px;border-radius:9px;font-size:9px;color:#7890aa}.stats b{display:block;font-size:15px;color:#eaf2ff;margin-top:3px}.history{margin-top:10px;max-height:220px;overflow:auto}.row{display:grid;grid-template-columns:65px 1fr 1fr 55px;gap:6px;padding:9px 0;border-bottom:1px solid #1a2c40;font-size:10px}.win{color:#77d7a8}.loss{color:#ff8d9d}footer{text-align:center;color:#60758e;font-size:10px;padding:10px 0 30px}@media(max-width:430px){.grid4{grid-template-columns:1fr 1fr}.metrics b{font-size:10px}}
+
+</style></head><body><header><div><div class="brand">SR TRADER</div><div class="sub">LIVE Market Signal Scanner</div></div><span id="status" class="pill">CONNECTING</span></header><main>
+<section class="card grid2"><label>Market Mode<select id="mode"><option selected>LIVE</option><option>OTC</option></select></label><label>Pair<select id="pair"><option selected>XAUUSD</option><option>EURUSD</option><option>GBPUSD</option><option>USDJPY</option></select></label><label>Timeframe<select id="tf"><option>M1</option><option selected>M5</option><option>M15</option><option>M30</option><option>H1</option></select></label><div><small>Feed</small><b id="feed">LIVE FEED</b></div></section>
+<section class="card"><h2>Automatic Engine</h2><p class="note">Live candles are fetched automatically. EMA trend, RSI, ATR, support/resistance, breakout, rejection and false-break filters are combined. Mixed conditions = WAIT.</p><div class="next"><b id="updated">Waiting…</b><span>5-second data check</span></div></section>
+<section class="signal card"><div class="signalTop"><span>CURRENT SIGNAL</span><strong id="signal">WAIT</strong></div><div class="score"><div class="bar"><i id="bar"></i></div><span id="score">0/100</span></div><div class="metrics"><div><small>Direction</small><b id="direction">—</b></div><div><small>Entry</small><b id="entry">—</b></div><div><small>SL</small><b id="sl">—</b></div><div><small>TP1</small><b id="tp1">—</b></div><div><small>TP2</small><b id="tp2">—</b></div></div><p id="reason">Connecting to live market…</p></section>
+<section class="actions"><button id="scan">SCAN NOW</button><button id="auto" class="secondary">STOP AUTO SCAN</button></section>
+<section class="card"><h2>Next Candle Model</h2><div class="next"><b id="nextDir">WAIT</b><span id="nextProb">Confirmation: —</span></div><p class="note">This is a confirmation score, not a guaranteed probability. The app never creates a signal from random/synthetic candles.</p></section>
+<section class="card"><h2>Signal History</h2><div class="stats"><span>Signals <b id="signals">0</b></span><span>Wins <b id="wins">0</b></span><span>Losses <b id="losses">0</b></span><span>Accuracy <b id="accuracy">—</b></span></div><div id="history" class="history">No completed signals yet.</div><button id="clear" class="danger">CLEAR HISTORY</button></section>
+</main><footer>SR Trader • Live feed • Demo-first • No guaranteed accuracy</footer><script>
+const $=id=>document.getElementById(id);
+const API='https://biquote.io/api';
+let candles=[], history=[], timer=null, lastBarTime=null, pending=null, lastSignalKey=null;
+const tfMap={M1:'1m',M5:'5m',M15:'15m',M30:'30m',H1:'1h'};
+try{history=JSON.parse(localStorage.getItem('sr_trader_history_final')||'[]')}catch(e){history=[]}
+function pair(){return $('pair').value} function tf(){return $('tf').value}
+function fmt(x){if(!Number.isFinite(x))return '—';return pair()==='XAUUSD'?x.toFixed(2):x.toFixed(5)}
+function setStatus(t,ok=false){$('status').textContent=t;$('status').className='pill '+(ok?'ok':'')}
+function ema(a,p){let k=2/(p+1),v=a[0];for(let i=1;i<a.length;i++)v=a[i]*k+v*(1-k);return v}
+function rsi(a,p=14){if(a.length<=p)return 50;let g=0,l=0;for(let i=a.length-p;i<a.length;i++){let d=a[i]-a[i-1];if(d>0)g+=d;else l-=d}if(l===0)return 100;let rs=(g/p)/(l/p);return 100-100/(1+rs)}
+function atr(cs,p=14){if(cs.length<=p)return 0;let tr=[];for(let i=1;i<cs.length;i++)tr.push(Math.max(cs[i].h-cs[i].l,Math.abs(cs[i].h-cs[i-1].c),Math.abs(cs[i].l-cs[i-1].c)));return tr.slice(-p).reduce((a,b)=>a+b,0)/Math.min(p,tr.length)}
+function levels(cs,n=30){let s=cs.slice(-n);return {sup:Math.min(...s.map(x=>x.l)),res:Math.max(...s.map(x=>x.h))}}
+function normalize(raw){return raw.map(x=>{if(Array.isArray(x))return {t:+x[0],o:+x[1],h:+x[2],l:+x[3],c:+x[4],isOpen:false};return {t:+(x.t??x.time??x.timestamp??x.openTime),o:+(x.o??x.open),h:+(x.h??x.high),l:+(x.l??x.low),c:+(x.c??x.close),isOpen:!!x.isOpen}}).filter(x=>[x.t,x.o,x.h,x.l,x.c].every(Number.isFinite)).sort((a,b)=>a.t-b.t)}
+async function fetchBars(){
+  const u=`${API}/${pair()}/ohlc?interval=${tfMap[tf()]}&limit=220`;
+  const r=await fetch(u,{cache:'no-store'}); if(!r.ok)throw Error('HTTP '+r.status);
+  const j=await r.json(); const raw=Array.isArray(j)?j:(j.bars||j.data||j.candles||j.result||[]); const cs=normalize(raw);
+  if(cs.length<60)throw Error('Market data incomplete'); return cs;
+}
+function score(cs){
+  const c=cs[cs.length-1], closes=cs.map(x=>x.c), e9=ema(closes.slice(-80),9),e21=ema(closes.slice(-100),21),e50=ema(closes.slice(-120),50), rr=rsi(closes), aa=atr(cs), lv=levels(cs), prev=cs[cs.length-2];
+  let buy=0,sell=0,why=[];
+  if(e9>e21&&e21>e50){buy+=18;why.push('EMA bullish')} else if(e9<e21&&e21<e50){sell+=18;why.push('EMA bearish')}
+  if(rr>=55&&rr<72){buy+=12;why.push('RSI bullish')} else if(rr<=45&&rr>28){sell+=12;why.push('RSI bearish')}
+  if(c.c>prev.h){buy+=18;why.push('breakout up')} else if(c.c<prev.l){sell+=18;why.push('breakout down')}
+  const body=Math.abs(c.c-c.o),range=Math.max(c.h-c.l,1e-12);
+  if(body/range>=.55){if(c.c>c.o){buy+=12;why.push('strong bull candle')}else{sell+=12;why.push('strong bear candle')}}
+  const nearSup=(c.c-lv.sup)<=aa*.7,nearRes=(lv.res-c.c)<=aa*.7;
+  if(nearSup&&c.c>c.o){buy+=10;why.push('support rejection')} if(nearRes&&c.c<c.o){sell+=10;why.push('resistance rejection')}
+  const prevRange=Math.max(prev.h-prev.l,1e-12);
+  if(c.h>prev.h&&c.c<prev.h){sell+=8;why.push('false-break up')} if(c.l<prev.l&&c.c>prev.l){buy+=8;why.push('false-break down')}
+  const dir=buy>=sell+10?'BUY':sell>=buy+10?'SELL':'WAIT', raw=Math.max(buy,sell), conf=Math.min(95,Math.round(50+raw*.55));
+  const entry=c.c, risk=Math.max(aa,range*.9); return {dir,conf,entry,sl:dir==='BUY'?entry-risk:dir==='SELL'?entry+risk:null,tp1:dir==='BUY'?entry+risk*1.2:dir==='SELL'?entry-risk*1.2:null,tp2:dir==='BUY'?entry+risk*2:dir==='SELL'?entry-risk*2:null,rr,aa,why:why.join(' • ')||'Conditions mixed; waiting for confirmation',key:String(c.t),trend:e9>e21?'UP':e9<e21?'DOWN':'FLAT',support:lv.sup,resistance:lv.res};
+}
+function render(x){$('signal').textContent=x.dir;$('direction').textContent=x.dir;$('score').textContent=x.conf+'/100';$('bar').style.width=x.conf+'%';$('entry').textContent=fmt(x.entry);$('sl').textContent=fmt(x.sl);$('tp1').textContent=fmt(x.tp1);$('tp2').textContent=fmt(x.tp2);$('nextDir').textContent=x.dir;$('nextProb').textContent=x.dir==='WAIT'?'Confirmation: insufficient':'Confirmation score: '+x.conf+'/100';$('reason').textContent=x.why+' • Trend '+x.trend+' • RSI '+x.rr.toFixed(1)+' • ATR '+fmt(x.aa);$('feed').textContent=`LIVE FEED • ${pair()} • ${tf()}`;$('updated').textContent='Updated '+new Date().toLocaleTimeString();}
+function save(){try{localStorage.setItem('sr_trader_history_final',JSON.stringify(history.slice(0,200)))}catch(e){}drawHistory()}
+function settle(bar){if(!pending)return; if(bar.t<=pending.t)return; const move=bar.c-pending.entry; const win=(pending.dir==='BUY'&&move>0)||(pending.dir==='SELL'&&move<0); history.unshift({time:new Date(pending.t).toLocaleString(),pair:pending.pair,tf:pending.tf,dir:pending.dir,entry:fmt(pending.entry),outcome:win?'WIN':'LOSS'});pending=null;save()}
+function signal(x){if(x.dir==='WAIT'||x.key===lastSignalKey)return; lastSignalKey=x.key; pending={t:+x.key,pair:pair(),tf:tf(),dir:x.dir,entry:x.entry};}
+async function scan(){
+  try{setStatus('LOADING…'); const cs=await fetchBars(); const closed=cs.filter(x=>!x.isOpen); const usable=closed.length>=60?closed:cs; const newest=usable[usable.length-1];
+    // The API returns the current open bar first; signals are based only on completed candles.
+    candles=usable; if(lastBarTime===newest.t){setStatus('LIVE • NO NEW CANDLE',true);return}
+    lastBarTime=newest.t; settle(newest); const x=score(usable); render(x); signal(x); setStatus('LIVE • CONNECTED',true);
+  }catch(e){setStatus('DATA ERROR');$('reason').textContent='Live market data unavailable: '+e.message+'. No signal generated. Open this index.html in Chrome, not the file preview.';$('signal').textContent='WAIT';$('nextDir').textContent='WAIT'}
+}
+function drawHistory(){const w=history.filter(x=>x.outcome==='WIN').length,l=history.filter(x=>x.outcome==='LOSS').length;$('signals').textContent=history.length;$('wins').textContent=w;$('losses').textContent=l;$('accuracy').textContent=history.length?Math.round(w/history.length*100)+'%':'—';$('history').innerHTML=history.length?history.map(x=>`<div class="row"><span>${x.time}</span><span>${x.pair} ${x.tf}</span><b>${x.dir}</b><span class="${x.outcome==='WIN'?'win':'loss'}">${x.outcome}</span></div>`).join(''):'No completed signals yet.'}
+function reset(){lastBarTime=null;lastSignalKey=null;pending=null;$('signal').textContent='WAIT';$('reason').textContent='Connecting to live market…';scan()}
+function bind(){
+ $('scan').onclick=scan; $('auto').onclick=()=>{if(timer){clearInterval(timer);timer=null;$('auto').textContent='START AUTO SCAN'}else{scan();timer=setInterval(scan,5000);$('auto').textContent='STOP AUTO SCAN'}};
+ $('clear').onclick=()=>{history=[];save()}; ['pair','tf','mode'].forEach(id=>$(id).onchange=()=>{if(id==='mode'&&$('mode').value==='OTC'){setStatus('OTC FEED NOT CONNECTED');$('reason').textContent='Real Quotex OTC data is not publicly supplied by this app. LIVE mode uses the connected market feed.';$('signal').textContent='WAIT';return} reset()}); drawHistory(); scan(); timer=setInterval(scan,5000);$('auto').textContent='STOP AUTO SCAN';
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind);else bind();
+
+</script></body></html>
